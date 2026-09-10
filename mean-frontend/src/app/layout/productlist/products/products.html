@@ -1,0 +1,43 @@
+<div class="product-container">
+  <div class="image-box">
+    <!-- @if (myProduct) {
+      <span class="new-label">NEW</span>
+    } -->
+@if (myProduct.stock === 0) {
+  <p class="stock out">Out of Stock</p>
+}
+@else if (myProduct.stock <= 5) {
+  <p class="stock low">Only {{myProduct.stock}} left</p>
+}
+@else {
+  <p class="stock available">In Stock</p>
+}
+    <img
+      class="product-img"
+      [src]="staticURL + myProduct.image"
+      alt="{{ myProduct.name }}" 
+      >
+      <!--  
+       (click)="addToCart(myProduct) TO BUTTON
+      -->
+       
+
+         <button [routerLink]="['/productdetails', myProduct.slug]" class="add-to-cart-btn" type="button">More Details</button>
+ 
+  </div>
+
+  <div class="product-details">
+    <div class="name-price-row">
+    <p class="category-label">{{ (myProduct.categoryId.name) | titlecase }}</p>
+    <p class="category-label">{{ (myProduct.subCategoryId.name) | titlecase }}</p>
+    </div>
+
+ 
+    <div class="name-price-row">
+      <h3 class="product-name">{{ myProduct.name }}</h3>
+      <span class="product-price">{{ myProduct.price | number:'1.0-0' }} $</span>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,115 @@
+<div class="productlist-wrapper">
+
+  <!-- FILTERS SIDEBAR -->
+  <aside class="filters-sidebar">
+
+    <div class="filter-section">
+      <h4 class="filter-title">Search</h4>
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" placeholder="Search products..." [formControl]="searchControl">
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <h4 class="filter-title">Category</h4>
+      <ul class="filter-list">
+        <li class="filter-item" [class.active]="!selectedCategory" (click)="selectCategory(null)">
+          All
+        </li>
+        @for (cat of categories; track cat._id) {
+          <li class="filter-item" [class.active]="selectedCategory === cat._id" (click)="selectCategory(cat._id)">
+            {{ cat.name }}
+          </li>
+        }
+      </ul>
+    </div>
+
+    @if (subCategories.length > 0) {
+    <div class="filter-section">
+      <h4 class="filter-title">Sub Category</h4>
+      <ul class="filter-list">
+        <li class="filter-item" [class.active]="!selectedSub" (click)="selectSub(null)">
+          All
+        </li>
+        @for (sub of subCategories; track sub._id) {
+          <li class="filter-item" [class.active]="selectedSub === sub._id" (click)="selectSub(sub._id)">
+            {{ sub.name }}
+          </li>
+        }
+      </ul>
+    </div>
+    }
+
+    <div class="filter-section">
+      <h4 class="filter-title">Price Range</h4>
+      <div class="price-inputs">
+        <div class="field">
+          <label>Min</label>
+          <input type="number" placeholder="0" [formControl]="minPriceControl">
+        </div>
+        <div class="price-divider">—</div>
+        <div class="field">
+          <label>Max</label>
+          <input type="number" placeholder="9999" [formControl]="maxPriceControl">
+        </div>
+      </div>
+    </div>
+
+    <button class="clear-filters-btn" (click)="clearFilters()">Clear Filters</button>
+
+  </aside>
+
+  <!-- PRODUCTS AREA -->
+  <div class="products-area">
+
+    <!-- TOPBAR -->
+    <div class="products-topbar">
+      <p class="products-count">
+        @if (pagination) {
+          {{ pagination.total }} Products
+        }
+      </p>
+    </div>
+
+    <!-- GRID -->
+    @if (products.length > 0) {
+    <div class="products-grid">
+      @for (product of products; track product._id) {
+        <app-products [myProduct]="product"></app-products>
+      }
+    </div>
+    }
+
+    @if (products.length === 0) {
+      <div class="products-empty">
+        <p>No products found.</p>
+        <button class="clear-filters-btn" (click)="clearFilters()">Clear Filters</button>
+      </div>
+    }
+
+    <!-- PAGINATION -->
+    @if (pagination && pagination.pages > 1) {
+    <div class="pagination">
+      <button class="page-btn" (click)="changePage(pagination.page - 1)" [disabled]="pagination.page === 1">
+        ←
+      </button>
+
+      @for (page of getPages(); track page) {
+        <button class="page-btn" [class.active]="page === pagination.page" (click)="changePage(page)">
+          {{ page }}
+        </button>
+      }
+
+      <button class="page-btn" (click)="changePage(pagination.page + 1)" [disabled]="pagination.page === pagination.pages">
+        →
+      </button>
+    </div>
+    }
+
+  </div>
+
+</div>

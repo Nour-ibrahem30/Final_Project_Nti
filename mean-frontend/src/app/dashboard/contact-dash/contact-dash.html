@@ -1,0 +1,108 @@
+<div class="topbar">
+  <div class="topbar-left">
+    <h1 class="topbar-title">Messages</h1>
+    @if (unreadCount > 0) {
+      <span class="unread-badge">{{ unreadCount }} unread</span>
+    }
+  </div>
+</div>
+
+<div class="contact-wrapper">
+
+  <div class="contact-list">
+    @if (contacts.length === 0) {
+      <div class="contact-empty">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <p>No messages yet.</p>
+      </div>
+    }
+
+    @for (contact of contacts; track contact._id) {
+    <div class="contact-item"
+      [class.active]="selectedContact?._id === contact._id"
+      [class.unread]="!contact.isRead"
+      (click)="openMessage(contact)">
+
+      <div class="contact-item-header">
+        <span class="contact-item-name">{{ contact.name }}</span>
+        <span class="contact-item-date">{{ contact.createdAt | date:'MMM d' }}</span>
+      </div>
+
+      <p class="contact-item-email">{{ contact.email }}</p>
+      <p class="contact-item-preview">{{ contact.message }}</p>
+
+      @if (!contact.isRead) {
+        <span class="unread-dot"></span>
+      }
+
+    </div>
+    }
+  </div>
+
+  <div class="contact-detail">
+    @if (!selectedContact) {
+      <div class="contact-detail-empty">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ddd" stroke-width="1">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <p>Select a message to read</p>
+      </div>
+    }
+
+    @if (selectedContact) {
+    <div class="contact-detail-content">
+
+      <div class="contact-detail-header">
+        <div class="contact-detail-info">
+          <div class="contact-detail-avatar">
+            {{ selectedContact.name.charAt(0).toUpperCase() }}
+          </div>
+          <div>
+            <p class="contact-detail-name">{{ selectedContact.name }}</p>
+            <p class="contact-detail-email">{{ selectedContact.email }}</p>
+          </div>
+        </div>
+        <div class="contact-detail-actions">
+          <span class="contact-detail-date">{{ selectedContact.createdAt | date:'MMM d, yyyy · h:mm a' }}</span>
+          <button
+            class="read-toggle-btn"
+            [class.read]="selectedContact.isRead"
+            (click)="toggleRead(selectedContact)">
+            @if (selectedContact.isRead) {
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              Mark Unread
+            } @else {
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+              Mark Read
+            }
+          </button>
+          <button class="close-btn" (click)="closeMessage()">✕</button>
+        </div>
+      </div>
+
+      <div class="contact-detail-divider"></div>
+
+      <div class="contact-detail-message">
+        <p>{{ selectedContact.message }}</p>
+      </div>
+
+      <div class="contact-detail-status">
+        <span class="status-badge" [class.active]="selectedContact.isRead" [class.inactive]="!selectedContact.isRead">
+          {{ selectedContact.isRead ? 'Read' : 'Unread' }}
+        </span>
+      </div>
+
+    </div>
+    }
+  </div>
+
+</div>

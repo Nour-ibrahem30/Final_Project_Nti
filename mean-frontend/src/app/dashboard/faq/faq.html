@@ -1,0 +1,88 @@
+<div class="topbar">
+  <h1 class="topbar-title">FAQs</h1>
+  <button class="dash-btn primary" (click)="openAdd()">+ Add FAQ</button>
+</div>
+
+@if (showForm) {
+<div class="dash-form-card">
+  <h3 class="form-title">{{ editingFaq ? 'Edit FAQ' : 'Add FAQ' }}</h3>
+
+  <form [formGroup]="faqForm" (ngSubmit)="onSubmit()" class="dash-form">
+
+    <div class="field">
+      <label>Question</label>
+      <input type="text" formControlName="question" placeholder="Enter question">
+      @if (faqForm.get('question')?.invalid && faqForm.get('question')?.touched) {
+        <span class="field-error">Question is required</span>
+      }
+    </div>
+
+    <div class="field">
+      <label>Answer</label>
+      <textarea formControlName="answer" placeholder="Enter answer" rows="4"></textarea>
+      @if (faqForm.get('answer')?.invalid && faqForm.get('answer')?.touched) {
+        <span class="field-error">Answer is required</span>
+      }
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Status</label>
+        <select formControlName="isActive">
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Inactive</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="dash-btn primary">
+        {{ editingFaq ? 'Update FAQ' : 'Add FAQ' }}
+      </button>
+      <button type="button" class="dash-btn ghost" (click)="closeForm()">Cancel</button>
+    </div>
+
+  </form>
+</div>
+}
+
+<div class="dash-table-wrapper">
+  <table class="dash-table">
+    <thead>
+      <tr>
+        <th>Question</th>
+        <th>Answer</th>
+        <th>Status</th>
+        <th>Created</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @if (faqs.length === 0) {
+        <tr>
+          <td colspan="5" class="td-empty">No FAQs found.</td>
+        </tr>
+      }
+      @for (faq of faqs; track faq._id) {
+      <tr>
+        <td class="td-name td-question">{{ faq.question }}</td>
+        <td class="td-answer">{{ faq.answer }}</td>
+        <td>
+          <span class="status-badge"
+            [class.active]="faq.isActive"
+            [class.inactive]="!faq.isActive">
+            {{ faq.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+        <td class="td-date">{{ faq.createdAt | date:'MMM d, yyyy' }}</td>
+        <td>
+          <div class="table-actions">
+            <button class="action-btn edit" (click)="openEdit(faq)">Edit</button>
+            <button class="action-btn delete" (click)="delete(faq._id)">Delete</button>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

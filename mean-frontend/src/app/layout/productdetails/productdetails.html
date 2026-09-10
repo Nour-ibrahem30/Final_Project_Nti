@@ -1,0 +1,68 @@
+<h1 class="page-title">My Products</h1>
+
+@if (myProduct) {
+<div class="product-details">
+
+  <div class="product-image">
+    <img [src]="staticLink + myProduct.image">
+  </div>
+
+  <div class="product-info">
+    <h1>{{ myProduct.name }}</h1>
+
+    <p class="desc">
+      {{ myProduct.description }}
+    </p>
+
+    <div class="badges">
+      <p class="cat">{{ myProduct.categoryId.name }}</p>
+      <p class="sub">{{ myProduct.subCategoryId.name }}</p>
+    </div>
+
+    <p class="price">
+      {{ myProduct.price }} $
+    </p>
+
+    <!-- QUANTITY -->
+    
+    <div class="quantity-row">
+      <label>Quantity</label>
+      <div class="quantity-control">
+        <button class="qty-btn" (click)="decrease()" [disabled]="quantity === 1">−</button>
+        <span class="qty-value">{{ quantity }}</span>
+        <button class="qty-btn" (click)="increase()" [disabled]="quantity >= myProduct.stock">+</button>
+      </div>
+    </div>
+
+
+<button 
+  class="buy-btn" 
+  (click)="addToCart()" 
+  [disabled]="myProduct.stock === 0 || isAddedToCart">
+  {{ isAddedToCart ? '✓ Added to Cart' : 'Add to Cart' }}
+</button>
+
+    @if (myProduct.stock === 0) {
+  <p class="stock out">Out of Stock</p>
+}
+@else if (myProduct.stock <= 5) {
+  <p class="stock low">Only {{myProduct.stock}} left</p>
+}
+@else {
+  <p class="stock available">In Stock</p>
+}
+  </div>
+
+
+</div>
+
+<h3 class="page-title">You may also like</h3>
+<div class="products-grid">
+    @for(product of products; track product){
+        <app-products [myProduct]="product"></app-products>
+    }
+</div>
+
+
+}
+

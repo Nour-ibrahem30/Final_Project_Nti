@@ -1,0 +1,73 @@
+@if(userData){
+  <section class="for-you">
+    <div class="for-you-header">
+      <h2 class="for-you-title">Hi, {{ userData.name }} 👋</h2>
+      <p class="page-title">We picked these just for you</p>
+    </div>
+
+    <div class="for-you-grid">
+      @for(product of randomProducts; track product._id){
+        <div class="product-card" [routerLink]="['/productdetails', product.slug]">
+          
+          <!-- number -->
+          <span class="product-number">{{ String(($index + 1)).padStart(3, '0') }}</span>
+
+          <!-- image fills card -->
+          <img [src]="staticURL + product.image" [alt]="product.name" class="product-bg-img">
+
+          <!-- dark overlay -->
+          <div class="product-overlay"></div>
+
+          <!-- top badges -->
+          <div class="product-top">
+            <span class="product-category">{{ product.categoryId.name }}</span>
+            <span class="product-price-badge">{{ product.price }} $</span>
+          </div>
+
+          <!-- bottom info -->
+          <div class="product-bottom">
+            <h3 class="product-name">{{ product.name }}</h3>
+            <button class="product-arrow">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="7" y1="17" x2="17" y2="7"/>
+                <polyline points="7 7 17 7 17 17"/>
+              </svg>
+            </button>
+          </div>
+
+        </div>
+      }
+    </div>
+  </section>
+}
+
+ <div class="for-you-header">
+<h2 class="page-title"> Our Categories</h2>
+</div>
+<section class="hero-categories">
+
+  @for (cat of category; track cat._id) {
+  <div class="hero-card" [routerLink]="['/productlist', cat._id]">
+    <div class="hero-image" [style.background-image]="'url(' + getCategoryImage(cat.name) + ')'">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <p class="hero-sub">New Collection</p>
+        <h2 class="hero-title">{{ cat.name }}</h2>
+        <span class="hero-cta">
+          Shop Now
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </div>
+  }
+
+</section>
+
+ <div class="for-you-header">
+<h2 class="page-title"> User Reviews</h2>
+<app-testimonial></app-testimonial>
+</div>

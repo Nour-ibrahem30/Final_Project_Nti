@@ -1,0 +1,11 @@
+const router = require('express').Router();
+const { protect } = require('../middleware/auth.middleware');
+const { getCart, addToCart, updateCartItem, removeCartItem, resolvePriceChange, clearCart } = require('../controller/cart.controller');
+router.use(protect);
+router.get('/', getCart);
+router.post('/add', addToCart);
+router.put('/item/:itemId', updateCartItem);
+router.delete('/item/:itemId', removeCartItem);
+router.put('/item/:itemId/price-change', resolvePriceChange);
+router.delete('/clear', clearCart);
+module.exports = router;

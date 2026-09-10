@@ -1,0 +1,86 @@
+<div class="topbar">
+  <h1 class="topbar-title">Sub Categories</h1>
+  <button class="dash-btn primary" (click)="openAdd()">+ Add Sub Category</button>
+</div>
+
+<!-- FORM -->
+@if(showForm){
+<div class="dash-form-card">
+  <h3 class="form-title"> {{editingSubCategory ? 'Edit Sub Category' : 'Add Sub Category'}} </h3>
+
+  <form  class="dash-form" [formGroup]="subCategoryForm" (ngSubmit)="save()">
+
+    <div class="field-row">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" formControlName="name" placeholder="Sub category name">
+        
+        @if (subCategoryForm.get('name')?.invalid && subCategoryForm.get('name')?.touched) {
+          <span class="field-error">Name is required</span>
+        }
+      </div>
+      <div class="field">
+        <label>Category</label>
+        <select formControlName="categoryId">
+          
+          <option value="">Select category</option>
+          @for (cat of categories; track cat._id) {
+                <option [value]="cat._id">{{ cat.name }}</option>
+              }
+        </select>
+        @if (subCategoryForm.get('name')?.invalid && subCategoryForm.get('name')?.touched) {
+          <span class="field-error">Category is required</span>
+        }
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="dash-btn primary">
+        {{ editingSubCategory ? 'Update' : 'Add' }}
+      </button>
+      <button type="button" class="dash-btn ghost" (click)="closeForm()">Cancel</button>
+    </div>
+
+  </form>
+</div>
+}
+<!-- TABLE -->
+<div class="dash-table-wrapper">
+  <table class="dash-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Created</th>
+        <th>Status</th>
+        <th>Actions</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+       @if (subCategories.length === 0) {
+        <tr>
+          <td colspan="4" class="td-empty">No sub categories found.</td>
+        </tr>
+      }
+      @for (sub of subCategories; track sub._id) {
+      <tr>
+        <td class="td-name"> {{sub.name}} </td>
+        <td> {{sub.categoryId.name}} </td>
+        <td class="td-date">{{sub.createdAt | date:'MMM d, yyyy'}} </td>
+        <td > <span class="status-badge" [class.active]="sub.isActive" [class.inactive]="!sub.isActive">
+             {{ sub.isActive ? 'Active' : 'Inactive' }}
+          </span></td>
+
+        <td>
+          
+          <div class="table-actions">
+            <button class="action-btn edit" (click)="openEdit(sub)">Edit</button>
+            <button class="action-btn delete" (click)="delete(sub._id)">Delete</button>
+          </div>
+        </td>
+      </tr>
+    }
+    </tbody>
+  </table>
+</div>

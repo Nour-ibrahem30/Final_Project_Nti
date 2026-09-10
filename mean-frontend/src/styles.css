@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+/* ===== PAGE HEADER ===== */
+.page-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0 0 40px 0;
+  padding: 40px 80px 0 80px;
+  position: relative;
+}
+
+.page-title::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: #111;
+  margin-top: 10px;
+}

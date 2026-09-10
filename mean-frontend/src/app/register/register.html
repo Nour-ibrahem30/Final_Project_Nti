@@ -1,0 +1,103 @@
+<div class="auth-page">
+  <div class="auth-card">
+
+    <!-- Logo -->
+    <div class="auth-logo">Mla-Besco</div>
+
+    <form [formGroup]="RegisterForm" (ngSubmit)="onRegister()">
+
+      <!-- Name -->
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" formControlName="name" placeholder="John Doe">
+        @if(RegisterForm.get('name')?.invalid && RegisterForm.get('name')?.touched){
+          <span class="error">Name is required</span>
+        }
+      </div>
+
+      <!-- Email -->
+      <div class="field">
+        <label>Email</label>
+        <input type="email" formControlName="email" placeholder="your@email.com">
+        @if(RegisterForm.get('email')?.touched){
+          @if(RegisterForm.get('email')?.hasError('required')){
+            <span class="error">Email is required</span>
+          } @else if(RegisterForm.get('email')?.hasError('email')){
+            <span class="error">Enter a valid email</span>
+          }
+        }
+      </div>
+
+      <!-- Gender -->
+      <div class="field">
+        <label>Gender</label>
+        <select formControlName="gender">
+          <option value="">Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+        @if(RegisterForm.get('gender')?.invalid && RegisterForm.get('gender')?.touched){
+          <span class="error">Gender is required</span>
+        }
+      </div>
+
+      <!-- Phone -->
+      <div class="field">
+        <label>Phone</label>
+        <input type="tel" formControlName="phone" placeholder="01XXXXXXXXX">
+        @if(RegisterForm.get('phone')?.touched){
+          @if(RegisterForm.get('phone')?.hasError('required')){
+            <span class="error">Phone is required</span>
+          } @else if(RegisterForm.get('phone')?.hasError('pattern')){
+            <span class="error">Enter a valid 11-digit phone number</span>
+          }
+        }
+      </div>
+
+      <!-- Password -->
+      <div class="field">
+        <label>Password</label>
+        <input type="password" formControlName="password" placeholder="••••••••">
+        @if(RegisterForm.get('password')?.touched){
+          @if(RegisterForm.get('password')?.hasError('required')){
+            <span class="error">Password is required</span>
+          } @else if(RegisterForm.get('password')?.hasError('minlength')){
+            <span class="error">Password must be at least 6 characters</span>
+          }
+        }
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="field">
+        <label>Confirm Password</label>
+        <input type="password" formControlName="confirmedpassword" placeholder="••••••••">
+        @if(RegisterForm.get('confirmedpassword')?.touched){
+          @if(RegisterForm.get('confirmedpassword')?.hasError('required')){
+            <span class="error">Please confirm your password</span>
+          } @else if(RegisterForm.hasError('passwordMismatch')){
+            <span class="error">Passwords do not match</span>
+          }
+        }
+      </div>
+@if(errorMessage){
+    <div class="error-banner">{{ errorMessage }}</div>
+     }
+      <!-- Submit -->
+      <button type="submit" class="submit-btn" [disabled]="RegisterForm.invalid">
+        Create Account
+      </button>
+
+      <!-- Go Home -->
+      <button type="button" class="home-btn" (click)="goHome()">
+        Go Home
+      </button>
+
+      <p class="switch-text">
+        Already have an account?
+        <span (click)="goLogin()">Login</span>
+      </p>
+
+    </form>
+
+  </div>
+</div>

@@ -1,0 +1,160 @@
+<div class="topbar">
+  <h1 class="topbar-title">Products</h1>
+  <button class="dash-btn primary" (click)="openAdd()">+ Add Product</button>
+</div>
+
+@if(showForm){
+<div class="dash-form-card">
+  <h3 class="form-title">{{ editingProduct ? 'Edit Product' : 'Add Product' }}</h3>
+  <form class="dash-form" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <img *ngIf="currentImage" 
+     [src]="staticURL + currentImage" 
+     width="50"
+     height="50" 
+     style="display:block; margin-bottom:10px;" />
+    <div class="field-row">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" formControlName="name" placeholder="Product name">
+      </div>
+
+      <div class="field">
+        <label>Price</label>
+        <input type="number" formControlName="price" placeholder="0.00">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Stock</label>
+        <input type="number" formControlName="stock" placeholder="0">
+      </div>
+      
+      <div class="field">
+        <label>Category</label>
+        <select formControlName="categoryId">
+          @for (category of categoires; track category ) {
+            <option [value]="category._id">{{category.name}}</option>
+          }
+          
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Sub Category</label>
+        <select formControlName="subCategoryId">
+          @for (subCategory of filteredSubCategories; track subCategory ) {
+            <option [value]="subCategory._id">{{subCategory.name}}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label>Image</label>
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" >
+      </div>
+    </div>
+    <div class="field">
+      <label>Description</label>
+      <textarea formControlName="description" placeholder="Product description" rows="3"></textarea>
+    </div>
+    <div class="field">
+      <label>Slug</label>
+      <textarea formControlName="slug" placeholder="product-slug" rows="2"></textarea>
+    </div>
+    <div class="field-row">
+  <div class="field">
+    <label>Status</label>
+    <select formControlName="isActive">
+      <option [ngValue]="true">Active</option>
+      <option [ngValue]="false">Inactive</option>
+    </select>
+  </div>
+</div>
+    <div class="form-actions">
+      <button class="dash-btn primary" type="submit">{{ editingProduct ? 'Update' : 'Add Product' }}</button>
+      <button class="dash-btn ghost" type="button" (click)="showForm = false">Cancel</button>
+    </div>
+  </form>
+</div>
+
+}
+
+
+<div class="dash-table-wrapper">
+  <table class="dash-table">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Category</th>
+        <th>SubCategory</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @if (products.length === 0) {
+        <tr>
+          <td colspan="8" class="td-empty">No products found.</td>
+        </tr>
+      }
+      @for (product of products; track product) {
+      <tr>
+        <td>
+          <div class="table-img">
+          <img [src]="staticURL + product.image " [alt]="product.name">
+        
+        </div>
+      </td>
+        <td class="td-name">{{product.name}} </td>
+        <td>{{product.price}}  $</td>
+        <td><span class="stock-badge" [class.low]="1 <= 5" [class.out]="0 === 0"> {{product.stock}} </span></td>
+        <td>{{product.categoryId.name}}</td>
+        <td>{{product.subCategoryId.name}}</td>
+
+        <td><span class="status-badge" [class.active]="product.isActive" [class.inactive]="!product.isActive"> {{ product.isActive ? 'Active' : 'Inactive' }}
+</span></td>
+        <td>
+          <div class="table-actions">
+            <button class="action-btn edit" type="button" (click)="openEdit(product)">Edit</button>
+            <button class="action-btn delete" type="button" (click)="deleteProduct(product._id)">Delete</button>
+          </div>
+        </td>
+      </tr>
+    }
+    </tbody>
+  </table>
+  @if (pagination && pagination.pages > 1) {
+<div class="dash-pagination">
+
+  <button class="page-btn"
+    (click)="changePage(pagination.page - 1)"
+    [disabled]="pagination.page === 1">
+    ←
+  </button>
+
+  @for (page of getPages(); track page) {
+    <button class="page-btn"
+      [class.active]="page === pagination.page"
+      (click)="changePage(page)">
+      {{ page }}
+    </button>
+  }
+
+  <button class="page-btn"
+    (click)="changePage(pagination.page + 1)"
+    [disabled]="pagination.page === pagination.pages">
+    →
+  </button>
+
+  <span class="pagination-info">
+    {{ pagination.page }} of {{ pagination.pages }} pages
+    ({{ pagination.total }} products)
+  </span>
+
+</div>
+}
+</div>

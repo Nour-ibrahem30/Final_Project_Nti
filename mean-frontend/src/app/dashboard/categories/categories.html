@@ -1,0 +1,75 @@
+<div class="topbar">
+  <h1 class="topbar-title">Categories</h1>
+  <button class="dash-btn primary" (click)="openAdd()">+ Add Category</button>
+</div>
+
+@if(showForm){
+<div class="dash-form-card">
+  <h3 class="form-title"> {{ editingCategory ? 'Edit Category' : 'Add Category' }} </h3>
+
+  <form  class="dash-form" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+
+    <div class="field-row">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" formControlName="name" placeholder="Category name">
+      @if (categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched) {
+          <span class="field-error">Name is required</span>
+        }
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select formControlName="isActive">
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Inactive</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="dash-btn primary">
+       {{ editingCategory ? 'Update' : 'Add Category' }}
+      </button>
+      <button type="button" class="dash-btn ghost" (click)="closeForm()">Cancel</button>
+    </div>
+
+  </form>
+</div>
+
+}
+<div class="dash-table-wrapper">
+  <table class="dash-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Created</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+       @if (categories.length === 0) {
+        <tr>
+          <td colspan="4" class="td-empty">No categories found.</td>
+        </tr>
+       }
+      @for (category of categories; track category) {
+      <tr>
+        <td class="td-name">{{category.name}}</td>
+        <td>
+          <span class="status-badge" [class.active]="category.isActive" [class.inactive]="!category.isActive">
+             {{ category.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+        <td class="td-date"> {{ category.createdAt | date:'MMM d, yyyy' }} </td>
+        <td>
+          <div class="table-actions">
+            <button class="action-btn edit" (click)="openEdit(category._id ,category)">Edit</button>
+            <button class="action-btn delete" (click)="deleteCategory(category._id)">Delete</button>
+          </div>
+        </td>
+      </tr>
+    }
+    </tbody>
+  </table>
+</div>

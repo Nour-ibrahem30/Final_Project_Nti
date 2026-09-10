@@ -1,0 +1,45 @@
+<h1 class="page-title">FAQ</h1>
+
+<div class="faq-wrapper">
+
+  <div class="faq-content">
+
+    @if (faqs.length === 0) {
+      <div class="faq-empty">
+        <p>No questions available yet.</p>
+      </div>
+    }
+
+    @for (item of faqs; track item._id) {
+      @if (item.isActive) {
+      <div class="faq-item" [class.open]="openIndex === item._id">
+
+        <button class="faq-question" (click)="toggle(item._id)">
+          {{ item.question }}
+          <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+
+        @if (openIndex === item._id) {
+          <div class="faq-answer">
+            <p>{{ item.answer }}</p>
+          </div>
+        }
+
+      </div>
+      }
+    }
+
+  </div>
+
+  <!-- CONTACT BOX -->
+  <aside class="faq-sidebar">
+    <div class="faq-contact">
+      <p class="faq-contact-title">Still need help?</p>
+      <p class="faq-contact-sub">Our team is here for you.</p>
+      <a routerLink="/contact" class="faq-contact-btn">Contact Us</a>
+    </div>
+  </aside>
+
+</div>

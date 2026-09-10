@@ -1,0 +1,102 @@
+<!-- APPROVED TESTIMONIALS -->
+@if (testimonials.length > 0) {
+<div class="testimonials-grid">
+  @for (t of testimonials; track t._id) {
+  <div class="testimonial-card">
+
+    <div class="testimonial-stars">
+      @for (star of getStars(t.rating); track star) {
+        <span class="star" [class.filled]="star <= t.rating">★</span>
+      }
+    </div>
+
+    <p class="testimonial-message">"{{ t.message }}"</p>
+
+    <div class="testimonial-author">
+      <div class="testimonial-avatar">
+        @if (t.userId.image) {
+          <img [src]="t.userId.image" [alt]="t.userId.name">
+        } @else {
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+        }
+      </div>
+      <div>
+        <p class="testimonial-name">{{ t.userId.name }}</p>
+        <p class="testimonial-date">{{ t.createdAt | date:'MMM d, yyyy' }}</p>
+      </div>
+    </div>
+
+  </div>
+  }
+</div>
+}
+
+@if (testimonials.length === 0) {
+  <p class="testimonials-empty">No reviews yet. Be the first!</p>
+}
+
+<!-- SUBMIT FORM — only for logged in users -->
+@if (isLoggedIn) {
+  <div class="testimonial-form-wrapper">
+    <h3 class="testimonial-form-title">Leave a Review</h3>
+
+    @if (isSubmitted) {
+      <div class="testimonial-success">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <p>{{ successMsg }}</p>
+      </div>
+    }
+
+    @if (!isSubmitted) {
+    <form [formGroup]="testimonialForm" (ngSubmit)="submit()" class="testimonial-form">
+
+      <!-- STAR RATING -->
+      <div class="field">
+        <label>Rating</label>
+        <div class="star-input">
+          @for (star of getStars(5); track star) {
+            <span class="star-select"
+              [class.filled]="star <= testimonialForm.get('rating')?.value"
+              (click)="setRating(star)">★</span>
+          }
+        </div>
+      </div>
+
+      <!-- MESSAGE -->
+      <div class="field">
+        <label>Your Review</label>
+        <textarea formControlName="message" placeholder="Share your experience..." rows="4"></textarea>
+        <div class="field-footer">
+          @if (testimonialForm.get('message')?.invalid && testimonialForm.get('message')?.touched) {
+            <span class="field-error">Message is required</span>
+          }
+          <span class="char-count">
+            {{ testimonialForm.get('message')?.value?.length || 0 }} / 500
+          </span>
+        </div>
+      </div>
+
+      @if (errorMsg) {
+        <p class="error-msg">{{ errorMsg }}</p>
+      }
+
+      <button type="submit" class="buy-btn" [disabled]="isLoading">
+        {{ isLoading ? 'Submitting...' : 'Submit Review' }}
+      </button>
+
+    </form>
+    }
+  </div>
+}
+
+<!-- NOT LOGGED IN -->
+@if (!isLoggedIn) {
+  <div class="testimonial-login-prompt">
+    <p>Want to leave a review? <a routerLink="/login">Login</a> first.</p>
+  </div>
+}

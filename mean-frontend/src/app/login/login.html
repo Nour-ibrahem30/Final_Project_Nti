@@ -1,0 +1,46 @@
+<div class="auth-page">
+
+  <div class="auth-card">
+    <!-- Logo -->
+    <div class="auth-logo">Mla-Besco</div>
+
+    <!-- Tabs -->
+    <!-- <div class="auth-tabs">
+      <button [class.active]="isLogin" (click)="isLogin = true">Login</button>
+      <button [class.active]="!isLogin" (click)="isLogin = false">Register</button>
+    </div> -->
+
+    <!-- LOGIN FORM -->
+    <!-- @if (loginForm) { -->
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+
+      <div class="field">
+        <label>Email</label>
+        <input type="email" formControlName="email" placeholder="your@email.com">
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input type="password" formControlName="password" placeholder="••••••••">
+      </div>
+
+    @if(errorMessage){
+    <div class="error-banner">{{ errorMessage }}</div>
+     }
+      <button type="submit" class="submit-btn">Login</button>
+      <button type="button" class="home-btn" (click)="cancle()">Go Home</button>
+
+      <p class="switch-text">
+        Don't have an account?
+        <span class="span-line" (click)="goRegister()">Create Account</span>
+      </p>
+
+    </form>
+    <!-- } -->
+ 
+ 
+
+
+  </div>
+
+</div>

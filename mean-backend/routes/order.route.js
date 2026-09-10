@@ -1,0 +1,10 @@
+const router = require('express').Router();
+const { protect, isAdmin } = require('../middleware/auth.middleware');
+const { placeOrder, getMyOrders, getOrderById, getAllOrders, updateOrderStatus, requestRefund } = require('../controller/order.controller');
+router.post('/', protect, placeOrder);
+router.get('/my-orders', protect, getMyOrders);
+router.get('/admin/all', protect, isAdmin, getAllOrders);
+router.get('/:id', protect, getOrderById);
+router.post('/:id/refund-request', protect, requestRefund);
+router.put('/:id/status', protect, isAdmin, updateOrderStatus);
+module.exports = router;

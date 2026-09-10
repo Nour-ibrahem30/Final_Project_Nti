@@ -1,0 +1,15 @@
+<section class="checkout-page">
+  <header class="page-head"><p class="eyebrow">CASH ON DELIVERY</p><h1>Checkout</h1><p>Complete your delivery details to place the order.</p></header>
+  @if(errorMsg){<div class="alert error">{{errorMsg}}</div>}
+  @if(blocked){<div class="price-alert"><strong>Price changes need your attention.</strong><span>Go to the cart and accept the new prices or remove the affected products.</span><a routerLink="/cart">Review cart</a></div>}
+  <div class="checkout-grid">
+    <div class="checkout-card" [formGroup]="form">
+      <h2>Delivery address</h2>
+      @if(addresses.length){<div class="address-list">@for(a of addresses; track a._id){<button type="button" class="address-option" [class.selected]="selectedAddress?._id===a._id" (click)="selectAddress(a)"><span>{{a.label}}</span><small>{{a.governorate}}, {{a.city}} · {{a.street}} · Building {{a.building}} {{a.apartment ? '· Apt '+a.apartment : ''}}</small></button>}</div>}
+      <button type="button" class="outline-btn" (click)="toggleNewAddress()">{{showNewAddress?'Use saved address':'Add new address'}}</button>
+      @if(showNewAddress){<div class="new-address" formGroupName="newAddress"><div class="form-grid"><input formControlName="label" placeholder="Label"><select formControlName="governorate"><option value="">Governorate</option><option>Cairo</option><option>Giza</option><option>Alexandria</option><option>Qalyubia</option><option>Dakahlia</option><option>Gharbia</option><option>Sharqia</option><option>Monufia</option><option>Beheira</option><option>Ismailia</option><option>Port Said</option><option>Suez</option></select><input formControlName="city" placeholder="City"><input formControlName="street" placeholder="Street"><input formControlName="building" placeholder="Building"><input formControlName="apartment" placeholder="Apartment (optional)"></div></div>}
+      <div class="required-block"><label>National ID <input formControlName="nationalId" maxlength="14" placeholder="14-digit National ID"></label><small>Required to establish the order.</small></div>
+    </div>
+    <aside class="checkout-summary"><h2>Order summary</h2>@if(cart){@for(item of cart.items; track item._id){<div class="summary-line"><span>{{item.productId.name}} × {{item.quantity}}</span><strong>{{item.priceAtOrder * item.quantity | number:'1.0-2'}} EGP</strong></div>}<div class="summary-line"><span>Delivery</span><span>Calculated by governorate</span></div><div class="summary-total"><span>Subtotal</span><strong>{{subtotal | number:'1.0-2'}} EGP</strong></div>}<p class="cash-note">Payment method: Cash when receiving.</p><button class="primary-btn" [disabled]="isLoading || blocked" (click)="placeOrder()">{{isLoading?'Placing order…':'Place order'}}</button><a routerLink="/cart" class="back-link">Back to cart</a></aside>
+  </div>
+</section>

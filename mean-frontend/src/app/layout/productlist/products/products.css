@@ -1,0 +1,148 @@
+
+/* ===== PRODUCT CARD ===== */
+.product-container {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+/* ===== IMAGE BOX ===== */
+.image-box {
+  position: relative;
+  background-color: #f4f4f4;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease;
+}
+
+.product-container:hover .product-img {
+  transform: scale(1.04);
+}
+
+/* ===== BUTTON - hidden by default, shows on hover ===== */
+.add-to-cart-btn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 13px 0;
+  background-color: #111;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.product-container:hover .add-to-cart-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.add-to-cart-btn:hover {
+  background-color: #333;
+}
+
+/* ===== NEW BADGE ===== */
+.new-label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #111;
+  background: #fff;
+  padding: 3px 8px;
+}
+
+/* ===== PRODUCT DETAILS ===== */
+.product-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.category-label {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+  font-weight: 400;
+}
+
+.name-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.product-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+  margin: 0;
+}
+
+.product-price {
+  font-size: 15px;
+  font-weight: 400;
+  color: #111;
+}
+
+.stock{
+  font-size:14px;
+  font-weight:600;
+  margin-top:6px;
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:6px;
+  letter-spacing:.03em;
+}
+
+/* Out of stock */
+.stock.out{
+  color:#b91c1c;
+  background:#fee2e2;
+}
+
+/* Low stock */
+.stock.low{
+  color:#b45309;
+  background:#fef3c7;
+}
+
+/* Available */
+.stock.available{
+  color:#065f46;
+  background:#d1fae5;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 16px;
+  }
+}

@@ -1,0 +1,125 @@
+<h1 class="page-title">My Profile</h1>
+
+@if (user) {
+<div class="profile-wrapper">
+
+  <!-- LEFT — AVATAR + INFO -->
+  <div class="profile-left">
+   <div class="profile-avatar" (click)="imageInput.click()">
+  @if (previewImage) {
+    <img [src]="previewImage" [alt]="user.name">
+  } @else if (user.image) {
+    <img [src]="staticURL + user.image" [alt]="user.name">
+  } @else {
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+    </svg>
+  }
+  <div class="avatar-overlay">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+      <circle cx="12" cy="13" r="4"/>
+    </svg>
+  </div>
+  <input #imageInput type="file" accept="image/*" (change)="onImageSelected($event)" hidden>
+</div>
+<p class="avatar-hint">Click to change photo</p>
+
+    <h2 class="profile-name">{{ user.name }}</h2>
+    <p class="profile-email">{{ user.email }}</p>
+    <span class="profile-role" [class.admin]="user.role === 'admin'">{{ user.role }}</span>
+
+    <div class="profile-meta">
+      <div class="meta-row">
+        <span class="meta-label">Phone</span>
+        <span class="meta-value">{{ user.phone }}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Gender</span>
+        <span class="meta-value">{{ user.gender }}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Member Since</span>
+        <span class="meta-value">{{ user.createdAt | date:'MMM d, yyyy' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT — EDIT FORM -->
+  <div class="profile-right">
+    <h3 class="profile-section-title">Edit Profile</h3>
+
+    <form [formGroup]="profileForm" (ngSubmit)="save()" class="profile-form">
+
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" formControlName="name" placeholder="John Doe">
+       @if (profileForm.get('name')?.invalid && profileForm.get('name')?.touched) {
+  <span class="field-error">Name is required</span>
+}
+      </div>
+
+      <div class="field">
+        <label>Email</label>
+        <input type="email" formControlName="email" placeholder="john@email.com">
+        @if (profileForm.get('email')?.invalid && profileForm.get('email')?.touched) {
+  <span class="field-error">Valid email is required</span>
+}
+      </div>
+
+      <div class="field">
+        <label>Phone</label>
+        <input type="tel" formControlName="phone" placeholder="+1 234 567 890">
+        @if (profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched) {
+  <span class="field-error">Phone is required</span>
+}
+      </div>
+
+      <div class="field">
+        <label>Gender</label>
+        <select formControlName="gender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+
+      <div class="profile-divider"></div>
+
+      <h3 class="profile-section-title">Change Password</h3>
+      <p class="profile-section-sub">Leave blank to keep current password</p>
+
+<div class="field">
+  <label>New Password</label>
+  <input type="password" formControlName="password" placeholder="••••••••">
+  @if (profileForm.get('password')?.touched &&
+       profileForm.get('password')?.value?.length > 0 &&
+       profileForm.get('password')?.value?.length < 6) {
+    <span class="field-error">Minimum 6 characters</span>
+  }
+</div>
+
+      <!-- <div class="field">
+        <label>Confirm Password</label>
+        <input type="password" formControlName="confirmPassword" placeholder="••••••••">
+        @if (profileForm.errors?.['mismatch'] && profileForm.get('confirmPassword')?.touched) {
+          <span class="field-error">Passwords do not match</span>
+        }
+      </div> -->
+
+      @if (successMsg) {
+        <p class="success-msg">✓ {{ successMsg }}</p>
+      }
+      @if (errorMsg) {
+        <p class="error-msg">{{ errorMsg }}</p>
+      }
+
+      <button type="submit" class="buy-btn">
+        Save Changes
+      </button>
+
+    </form>
+  </div>
+
+</div>
+}
